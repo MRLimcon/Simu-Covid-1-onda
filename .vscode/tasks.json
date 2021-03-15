@@ -1,0 +1,49 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "debug",
+            "type": "shell",
+            "command": "gfortran",
+            "args": [
+                "-shared",
+                "-Wall",
+                "-o",
+                "automato-modulo.so",
+                "automato-modulo.f95",
+                "-O3",
+                "-march=native",
+                "-fno-range-check",
+                "-fopenmp",
+                "-fPIC"
+            ],
+            "group": "build"
+        },
+        {
+            "label": "compilar modulo",
+            "type": "shell",
+            "command": "f2py",
+            "args": [
+                "-c",
+                "--opt='-O3 -ftree-vectorize -march=native -fno-range-check -fPIC -fopenmp -floop-nest-optimize '", //   
+                "-lgomp",
+                "automato-modulo.f95",
+                "-m",
+                "trisistor",
+                //"-DF2PY_REPORT_ATEXIT"
+            ],
+            "group": "build"
+        },
+        {
+            "label": "executar",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "./automato-covid.py"
+            ],
+            "group": "build"
+        },
+    ]
+}
